@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Students List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 70%;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            background-color: #f9f9f9;
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        a, button {
+            text-decoration: none;
+            color: #4CAF50;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+        a:hover, button:hover {
+            text-decoration: underline;
+        }
+        .add-new {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #4CAF50;
+        }
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .button {
+            display: inline-block;
+            margin: 10px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+        .button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Students List</h1>
+        <ul>
+            {% for student in students %}
+                <li>
+                    <div>
+                        <strong>{{ student.name }}</strong> - 
+                        GPA: {{ student.gpa }} | 
+                        Faculty: {{ student.faculty }} | 
+                        Age: {{ student.age }} | 
+                        Points: {{ student.points }} -
+                        <a href="{% url 'give_points' student.id %}">Give Points</a> -
+                        {% if student.faculty == "SEST" %}
+                            <a href="{% url 'schedule' faculty='sest' %}" target="_blank">View Schedule</a>
+                        {% elif student.faculty == "ECOL" %}
+                            <a href="{% url 'schedule' faculty='ecol' %}" target="_blank">View Schedule</a>
+                        {% elif student.faculty == "EHI" %}
+                            <a href="{% url 'schedule' faculty='ehi' %}" target="_blank">View Schedule</a>
+                        {% elif student.faculty == "DHT" %}
+                            <a href="{% url 'schedule' faculty='dht' %}" target="_blank">View Schedule</a>
+                        {% endif %}
+                    </div>
+                    <form method="post" action="{% url 'remove_person' student.id %}">
+                        {% csrf_token %}
+                        <button type="submit">Remove</button>
+                    </form>
+                </li>
+            {% endfor %}
+        </ul>
+        <div class="button-container">
+        <a class="button" href="{% url 'add_person' %}">Add New Student</a>
+        </div>
+        <div class="button-container">
+            <a class="button" href="{% url 'dish_list' %}">View canteen menu</a>
+        </div>
+    </div>
+</body>
+</html>
